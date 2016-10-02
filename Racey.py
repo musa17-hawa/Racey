@@ -30,6 +30,7 @@ pygame.display.set_caption('Racey')
 clock = pygame.time.Clock()
 carImg = pygame.image.load('racecar.png')
 car_width = 44
+car_height = 89
 pygame.display.set_icon(carImg)
 
 pause = False
@@ -145,11 +146,12 @@ def game_intro():
 		
 
 def game_loop():
-	pygame.mixer.music.play(-1)
+	#pygame.mixer.music.play(-1)
 	global pause
 	x = (display_height * 0.65)
 	y = (display_height * 0.83)
 
+	y_change = 0
 	x_change = 0
 	start_x = random.randrange(0,display_width)
 	start_y = -400
@@ -172,21 +174,28 @@ def game_loop():
 					x_change = -7+move_speed*-1
 				if event.key == pygame.K_RIGHT:
 					x_change = 7+move_speed*1
+				if event.key == pygame.K_UP:
+					y_change = -7+move_speed*1
+				if event.key == pygame.K_DOWN:
+					y_change = 7+move_speed*-1
 				if event.key == pygame.K_ESCAPE or event.key == pygame.K_p:
 					pause = True
 					paused()
 			if event.type == pygame.KEYUP:
-				if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+				if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
 					x_change = 0
+					y_change = 0
 
+		y+= y_change
 		x+= x_change
+
 		gameDisplay.fill(white)
 		things(start_x, start_y, ww, hh, black)
 		start_y+= thing_speed
 		car(x,y)
 		things_dodged(dodged)
 
-		if x > display_width - car_width or x < 0:
+		if x > display_width - car_width or x < 0 or y < 0 or y > display_height-car_height:
 			crash()
 			gameExit = True
 		if start_y > display_height:
@@ -195,13 +204,25 @@ def game_loop():
 			dodged += 1
 			thing_speed += 0.3
 			move_speed +=0.2
-		if y < start_y+hh:
-			if x > start_x and x < start_x+ww or x+car_width > start_x and x+car_width < start_x+ww: 
-				crash()
-		pygame.display.update()
-		clock.tick(60)
 
+		end_x = start_x+ww
+		end_y = start_y+hh
+		last_x = end_x+hh
+		last_y = end_x+hh
+
+		end_car_x = x+car_width
+		end_car_y = y+car_height
+		last_car_x = end_car_x+car_height
+		last_car_y = end_car_x+car_height
+
+		if y < start_y+hh:
+			if x > start_x and x < end_x or end_car_x > start_x and end_car_x < end_x:
+				if y > start_y and y > last_y or end_car_y > start_y and end_car_y < end_y:
+					crash()
+		pygame.display.update()
+		clock.tick(30)
 
 game_intro()
 game_loop()
 Quit()
+
