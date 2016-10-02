@@ -207,17 +207,13 @@ def game_loop():
 
 		end_x = start_x+ww
 		end_y = start_y+hh
-		last_x = end_x+hh
-		last_y = end_x+hh
 
 		end_car_x = x+car_width
 		end_car_y = y+car_height
-		last_car_x = end_car_x+car_height
-		last_car_y = end_car_x+car_height
 
 		if y < start_y+hh:
 			if x > start_x and x < end_x or end_car_x > start_x and end_car_x < end_x:
-				if y > start_y and y > last_y or end_car_y > start_y and end_car_y < end_y:
+				if y > start_y and y > end_y or end_car_y > start_y and end_car_y < end_y:
 					crash()
 		pygame.display.update()
 		clock.tick(30)
