@@ -3,8 +3,8 @@ import time
 import random
 pygame.init()
 
-# crash_sound = pygame.mixer.Sound("crash.wav")
-# pygame.mixer.music.load("game.wav")
+crash_sound = pygame.mixer.Sound("crash.wav")
+pygame.mixer.music.load("game.ogg")
 # intro_sound = pygame.mixer.Sound("intro.wav")
 
 display_width = 800
@@ -68,8 +68,8 @@ def text_intro(text, font):
 
 
 def crash():
-	# pygame.mixer.music.stop()
-	# pygame.mixer.Sound.play(crash_sound)
+	pygame.mixer.music.stop()
+	pygame.mixer.Sound.play(crash_sound)
 	TextSurf, TextRect = text_objects("Game Over !", largetext)
 	TextRect.center = ((display_width/2),(display_height/3))
 	gameDisplay.blit(TextSurf, TextRect)
@@ -102,11 +102,11 @@ def button(msg, x, y, w, h, i, a, action = None):
 
 def unpause():
 	global pause
-	# pygame.mixer.music.unpause()
+	pygame.mixer.music.unpause()
 	pause = False
 
 def paused():
-	# pygame.mixer.music.pause()
+	pygame.mixer.music.pause()
 	TextSurf, TextRect = text_intro("Paused", largetext)
 	TextRect.center = ((display_width/2),(display_height/3))
 	gameDisplay.blit(TextSurf, TextRect)
@@ -126,7 +126,6 @@ def paused():
 
 
 def game_intro():
-	# pygame.mixer.music.stop()
 	# pygame.mixer.Sound.play(intro_sound)
 	intro = True
 	gameDisplay.fill(black)
@@ -146,7 +145,7 @@ def game_intro():
 		
 
 def game_loop():
-	#pygame.mixer.music.play(-1)
+	pygame.mixer.music.play(-1)
 	global pause
 	x = (display_height * 0.65)
 	y = (display_height * 0.83)
@@ -206,8 +205,6 @@ def game_loop():
 			dodged += 1
 			thing_speed += 0.3
 			move_speed +=0.2
-			print(move_speed)
-
 
 		end_x = start_x+ww
 		end_y = start_y+hh
