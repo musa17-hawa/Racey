@@ -151,8 +151,7 @@ def game_loop():
 	x = (display_height * 0.65)
 	y = (display_height * 0.83)
 
-	y_change = 0
-	x_change = 0
+
 	start_x = random.randrange(0,display_width)
 	start_y = -400
 	thing_speed = 10
@@ -163,31 +162,34 @@ def game_loop():
 
 
 	gameExit = False
-
+	inputMap = [False, False, False, False]
 	while not gameExit:
-
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				Quit()
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_LEFT:
-					x_change = -7+move_speed*-1
+					inputMap[0] = True;
 				if event.key == pygame.K_RIGHT:
-					x_change = 7+move_speed*1
+					inputMap[1] = True;
 				if event.key == pygame.K_UP:
-					y_change = -7+move_speed*1
+					inputMap[2] = True;
 				if event.key == pygame.K_DOWN:
-					y_change = 7+move_speed*-1
+					inputMap[3] = True;
 				if event.key == pygame.K_ESCAPE or event.key == pygame.K_p:
 					pause = True
 					paused()
 			if event.type == pygame.KEYUP:
 				if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:
-					x_change = 0
-					y_change = 0
+					inputMap[0] = False;
+					inputMap[1] = False;
+					inputMap[2] = False;
+					inputMap[3] = False;
 
-		y+= y_change
-		x+= x_change
+		if inputMap[0]: x=(x-7)+(move_speed*-1)
+		if inputMap[1]: x=(x+7)+(move_speed*1)
+		if inputMap[2]: y=(y-7)+(move_speed*-1)
+		if inputMap[3]: y=(y+7)+(move_speed*1)
 
 		gameDisplay.fill(white)
 		things(start_x, start_y, ww, hh, black)
@@ -204,6 +206,8 @@ def game_loop():
 			dodged += 1
 			thing_speed += 0.3
 			move_speed +=0.2
+			print(move_speed)
+
 
 		end_x = start_x+ww
 		end_y = start_y+hh
@@ -213,7 +217,7 @@ def game_loop():
 
 		if y < start_y+hh:
 			if x > start_x and x < end_x or end_car_x > start_x and end_car_x < end_x:
-				if y > start_y and y > end_y or end_car_y > start_y and end_car_y < end_y:
+				if y > start_y and y < end_y or end_car_y > start_y and end_car_y < end_y :
 					crash()
 		pygame.display.update()
 		clock.tick(30)
